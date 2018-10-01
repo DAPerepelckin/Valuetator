@@ -13,6 +13,9 @@ import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import org.w3c.dom.Document;
@@ -37,6 +40,24 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 public class BlankFragment extends Fragment {
     String text;
+    Spinner spinner1;
+    TextView tv6;
+    String[] valutes = {"Австралийский доллар",
+        "Фунт стерлингов",
+        "Белорусский рубль",
+        "Датская крона",
+        "Доллар США",
+        "Евро",
+        "Исландская крона",
+        "Казахстанский тенге",
+        "Канадский доллар",
+        "Норвежская крона",
+        "Сингапурский доллар",
+        "Турецкая лира",
+        "Украинская гривна",
+        "Шведская крона",
+        "Швейцарский франк",
+        "Японсикая иена"};
     private static final int REQUEST_CODE = 123;
     String date_req="28/09/2018";
     String QUARY_URL="http://www.cbr.ru/scripts/XML_daily.asp?date_req=";
@@ -54,13 +75,6 @@ public class BlankFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        open=true;
-        requestPermissions(new String[]{Manifest.permission.INTERNET,Manifest.permission_group.STORAGE,Manifest.permission_group.PHONE},REQUEST_CODE);
-        new gettingParse().execute();
-
-
-
-
     }
 
 
@@ -68,7 +82,23 @@ public class BlankFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_blank, container, false);
+        View view = inflater.inflate(R.layout.fragment_blank,container,false);
+        open=true;
+
+
+        requestPermissions(new String[]{Manifest.permission.INTERNET,Manifest.permission_group.STORAGE,Manifest.permission_group.PHONE,Manifest.permission.ACCESS_NETWORK_STATE,Manifest.permission.CHANGE_NETWORK_STATE},REQUEST_CODE);
+
+
+        spinner1 = (Spinner) view.findViewById(R.id.spinner4);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.multiline_spinner_item,valutes);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner1.setAdapter(adapter);
+
+
+        new gettingParse().execute();
+
+
+        return view;
     }
 
 
@@ -90,7 +120,7 @@ private  class gettingParse extends AsyncTask<String,Void,Void>{
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        TextView tv6 = (TextView) getActivity().findViewById(R.id.textView6);
+        tv6 = (TextView) getView().findViewById(R.id.textView6);
         tv6.setText(text);
     }
 }
